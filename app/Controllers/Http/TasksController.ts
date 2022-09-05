@@ -4,14 +4,14 @@ import { rules, schema } from '@ioc:Adonis/Core/Validator'
 
 export default class TasksController {
     public async index(ctx: HttpContextContract) {
-        const tasks = await Task.all()
-        ctx.response.status(200)
-        return { tasks }
+        const userId = ctx.user?.id || 0
+        const tasks = await Task.query().where('user_id', userId)
+        return ctx.response.ok(tasks)
     }
 
     public async store(ctx: HttpContextContract) {
         const validationSchema = schema.create({
-            title: schema.string({ trim: true }, [rules.maxLength(255)])
+            title: schema.string({ trim: true }, [rules.maxLength(255)]),
         })
         const validatedTask = await ctx.request.validate({
             schema: validationSchema,
@@ -20,9 +20,9 @@ export default class TasksController {
                 'title.maxLength': 'Task title cannot exceed 255 characters!'
             }
         })
-        const newTask = await Task.create(validatedTask)
-        ctx.response.status(201)
-        return newTask
+        if (!ctx.user || !ctx.user.id) return
+        const newTask = await Task.create({ ...validatedTask, user_id: ctx.user.id })
+        return ctx.response.created(newTask)
     }
 
     public async update({ request, response, params }: HttpContextContract) {
@@ -39,23 +39,22 @@ export default class TasksController {
         })
         const task = await Task.findOrFail(params.id)
 
-        response.status(200)
+
         task.is_completed = validatedTask.is_completed
         task.title = validatedTask.title
         task.save()
-        return task
+        return response.ok(task)
     }
 
     public async show({ response, params }: HttpContextContract) {
         const task = await Task.findOrFail(params.id)
-        response.status(200)
-        return task
+        return response.ok(task)
     }
 
     public async destroy({ response, params }: HttpContextContract) {
         const task = await Task.findOrFail(params.id)
 
-        response.status(204)
+        response.noContent()
         task.delete()
         return
     }

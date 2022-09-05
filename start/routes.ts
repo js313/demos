@@ -24,11 +24,13 @@ Route.get('/', async () => {
   return { hello: 'world' }
 })
 
-Route.get('/task', 'TasksController.index')
-Route.post('/task', 'TasksController.store')
-Route.get('/task/:id', 'TasksController.show')
-Route.patch('/task/:id', 'TasksController.update')
-Route.delete('/task/:id', 'TasksController.destroy')
+Route.get('/task', 'TasksController.index').middleware('protect')
+Route.post('/task', 'TasksController.store').middleware('protect')
+Route.get('/task/:id', 'TasksController.show').middleware('protect').middleware('restrict')
+Route.patch('/task/:id', 'TasksController.update').middleware('protect').middleware('restrict')
+Route.delete('/task/:id', 'TasksController.destroy').middleware('protect').middleware('restrict')
 
 Route.post('/register', 'AuthController.register')
 Route.post('/login', 'AuthController.login')
+
+Route.get('/user', 'UsersController.index')

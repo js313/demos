@@ -8,6 +8,7 @@ export default class extends BaseSchema {
       table.increments('id').primary()
       table.string('title').notNullable()
       table.boolean('is_completed').defaultTo(false)
+      table.integer('user_id').unsigned().notNullable() // delete post when user is deleted
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

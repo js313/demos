@@ -1,7 +1,14 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import User from './User'
 
 export default class Task extends BaseModel {
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
+
+  @column({ isPrimary: true })
+  public user_id: number
+
   @column({ isPrimary: true })
   public id: number
 
