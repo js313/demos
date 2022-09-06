@@ -39,15 +39,14 @@ export default class TasksController {
         })
         const task = await Task.findOrFail(params.id)
 
-
         task.is_completed = validatedTask.is_completed
         task.title = validatedTask.title
         task.save()
         return response.ok(task)
     }
 
-    public async show({ response, params }: HttpContextContract) {
-        const task = await Task.findOrFail(params.id)
+    public async show({ response, params }: HttpContextContract) {  //preload to populate
+        const task = await Task.query().where('tasks.id', params.id).preload('user')
         return response.ok(task)
     }
 
