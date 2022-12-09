@@ -30,7 +30,7 @@ public class PersonController {
 
     @DeleteMapping(path = "{id}")
     public String deletePerson(@PathVariable("id") UUID id) {
-        if(personService.deletePerson(id) == 0) {
+        if(personService.deletePerson(id) == 1) {
             return "ID not found";
         }
         return "Person deleted";
