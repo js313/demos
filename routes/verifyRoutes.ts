@@ -1,11 +1,10 @@
-// import express from 'express'
-// import { resendOtp, verifySignup } from '../controllers/verifyControllers'
-// import { validationError } from '../utils/errorHandler'
+import express from 'express'
+import { validationError } from '../utils/errorHandler'
 // import { verifyResendOtpCheck, verifySignupCheck } from '../validation/verifyValidation'
-// const router = express.Router()
+const router = express.Router()
 
-// router.post('/signup', verifySignupCheck(), validationError, verifySignup)
+router.post('/signup', validationError)
 
-// router.post('/resend-otp', verifyResendOtpCheck(), validationError, resendOtp)
+router.post('/resend-otp', validationError)
 
-// export default router
+export default router

@@ -2,11 +2,9 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    return queryInterface.createTable('students', {
-      name: Sequelize.STRING,
-      email: Sequelize.STRING,
-      age: Sequelize.INTEGER,
-      classId: Sequelize.INTEGER
+    return queryInterface.createTable('classes', {
+      standard: Sequelize.INTEGER,
+      division: Sequelize.STRING
     })
   },
 

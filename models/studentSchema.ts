@@ -1,9 +1,9 @@
-import { DataTypes } from 'sequelize'
-import { IAddStudent } from '../utils/customInterfaces'
+import { IStudent } from '../utils/customInterfaces'
 import { sequelize } from '../utils/sequelizeConnection'
 import Sequelize from 'sequelize'
+import Class from './classSchema'
 
-export const Student = sequelize.define<IAddStudent>("students", {
+const Student = sequelize.define<IStudent>("students", {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -27,7 +27,19 @@ export const Student = sequelize.define<IAddStudent>("students", {
         validate: {
             isEmail: true
         }
+    },
+    deleted: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
     }
+}, { timestamps: false })
+
+Class.hasMany(Student, {
+    onDelete: 'cascade'
+})
+
+Student.belongsTo(Class, {
+    foreignKey: 'classId'
 })
 
 export default Student
